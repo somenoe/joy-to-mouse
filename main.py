@@ -70,10 +70,10 @@ class GamepadMouse:
         elif button == MIDDLE_CLICK:
             pyautogui.mouseDown(button='middle')
             logging.debug("Middle mouse button pressed")
-        elif button == MOUSE_SPEED_UP:
-            self.increase_sensitivity()
-        elif button == MOUSE_SPEED_DOWN:
-            self.decrease_sensitivity()
+        elif button == SCROLL_SPEED_UP:
+            self.increase_scroll_sensitivity()
+        elif button == SCROLL_SPEED_DOWN:
+            self.decrease_scroll_sensitivity()
         elif button == EXIT_BUTTON:
             logging.info("Exit button pressed")
             return True
@@ -151,14 +151,14 @@ class GamepadMouse:
                     elif event.type == pygame.JOYBUTTONUP:
                         self.handle_button_release(event.button)
 
-                # Handle triggers for scroll sensitivity
-                l_trigger = self.joystick.get_axis(SCROLL_SENSITIVITY_DOWN)
-                r_trigger = self.joystick.get_axis(SCROLL_SENSITIVITY_UP)
+                # Handle triggers for mouse sensitivity (changed from scroll sensitivity)
+                l_trigger = self.joystick.get_axis(MOUSE_SENSITIVITY_DOWN)
+                r_trigger = self.joystick.get_axis(MOUSE_SENSITIVITY_UP)
 
                 if l_trigger > 0.5:
-                    self.decrease_scroll_sensitivity()
+                    self.decrease_sensitivity()
                 elif r_trigger > 0.5:
-                    self.increase_scroll_sensitivity()
+                    self.increase_sensitivity()
 
                 movement_vector = self.get_stick_movement_vector(
                     *MOUSE_CONTROL)
