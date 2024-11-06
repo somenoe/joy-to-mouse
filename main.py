@@ -89,12 +89,12 @@ class GamepadMouse:
 
     def increase_sensitivity(self):
         self.current_sensitivity = min(
-            self.current_sensitivity * 1.2, MAX_SENSITIVITY)
+            self.current_sensitivity * SENSITIVITY_ADJUSTMENT_RATE, MAX_SENSITIVITY)
         logging.info(f"Sensitivity increased to: {self.current_sensitivity}")
 
     def decrease_sensitivity(self):
         self.current_sensitivity = max(
-            self.current_sensitivity / 1.2, MIN_SENSITIVITY)
+            self.current_sensitivity / SENSITIVITY_ADJUSTMENT_RATE, MIN_SENSITIVITY)
         logging.info(f"Sensitivity decreased to: {self.current_sensitivity}")
 
     def update_mouse_position(self, movement_vector):
