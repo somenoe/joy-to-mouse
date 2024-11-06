@@ -1,16 +1,49 @@
-# Controller Settings
-BUTTON_LEFT_CLICK = 0    # A/X button
-BUTTON_RIGHT_CLICK = 1   # B/Circle button
-BUTTON_MIDDLE_CLICK = 2  # X/Square button
-BUTTON_SPEED_UP = 5      # RB/R1 button
-BUTTON_SPEED_DOWN = 4    # LB/L1 button
-BUTTON_EXIT = 7          # Start/Options button
+# Xbox Controller Button Constants
+BUTTON_A = 0
+BUTTON_B = 1
+BUTTON_X = 2
+BUTTON_Y = 3
+BUTTON_LB = 4
+BUTTON_RB = 5
+BUTTON_BACK = 6
+BUTTON_START = 7
+BUTTON_L3 = 8
+BUTTON_R3 = 9
+
+# Analog Sticks and Triggers
+LEFT_ANALOG_X = 0     # Left stick X axis
+LEFT_ANALOG_Y = 1     # Left stick Y axis
+RIGHT_ANALOG_X = 2    # Right stick X axis
+RIGHT_ANALOG_Y = 3    # Right stick Y axis
+TRIGGER_L2 = 4        # Left trigger axis
+TRIGGER_R2 = 5        # Right trigger axis
+
+# Button Action Mappings
+LEFT_CLICK = BUTTON_A
+RIGHT_CLICK = BUTTON_B
+MIDDLE_CLICK = BUTTON_X
+EXIT_BUTTON = BUTTON_START
+MOUSE_SPEED_DOWN = BUTTON_LB
+MOUSE_SPEED_UP = BUTTON_RB
+
+# Stick Action Mappings
+MOUSE_CONTROL = (LEFT_ANALOG_X, LEFT_ANALOG_Y)      # Mouse movement
+SCROLL_CONTROL = (RIGHT_ANALOG_X, RIGHT_ANALOG_Y)   # Scrolling
+# Decrease scroll sensitivity
+SCROLL_SENSITIVITY_DOWN = TRIGGER_L2
+# Increase scroll sensitivity
+SCROLL_SENSITIVITY_UP = TRIGGER_R2
 
 # Mouse Settings
-MOUSE_SENSITIVITY = 2.0
 MOUSE_SPEED = 20.0
-MIN_SENSITIVITY = 0.2
-MAX_SENSITIVITY = 3.0
-SCROLL_SENSITIVITY = 0.8
+MOUSE_SENSITIVITY = 2.0
+MIN_SENSITIVITY = 0.5
+MAX_SENSITIVITY = 5.0
 DEADZONE = 0.1
 ACCELERATION = 1.2
+
+# Scroll sensitivity adjustment
+SCROLL_SENSITIVITY = 2
+SCROLL_SENSITIVITY_ADJUSTMENT_RATE = 1.2
+MIN_SCROLL_SENSITIVITY = 0.5
+MAX_SCROLL_SENSITIVITY = 5.0

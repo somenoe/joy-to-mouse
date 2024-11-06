@@ -36,6 +36,7 @@ class GamepadMouse:
         logging.info(f"Initialized gamepad: {self.joystick.get_name()}")
 
         self.setup_mouse_settings()
+        self.current_scroll_sensitivity = SCROLL_SENSITIVITY
         self.log_system_info()
 
     def setup_mouse_settings(self):
@@ -46,7 +47,9 @@ class GamepadMouse:
     def log_system_info(self):
         screen_width, screen_height = pyautogui.size()
         logging.info(f"Screen dimensions: {screen_width}x{screen_height}")
-        logging.info(f"Initial sensitivity: {self.current_sensitivity}")
+        logging.info(f"Initial mouse sensitivity: {self.current_sensitivity}")
+        logging.info(f"Initial scroll sensitivity: {
+                     self.current_scroll_sensitivity}")
 
     def get_stick_movement_vector(self, x_axis, y_axis):
         raw_x = self.joystick.get_axis(x_axis)
@@ -58,30 +61,30 @@ class GamepadMouse:
         return np.array([deadzone_adjusted_x, deadzone_adjusted_y])
 
     def handle_button_press(self, button):
-        if button == BUTTON_LEFT_CLICK:
+        if button == LEFT_CLICK:
             pyautogui.mouseDown(button='left')
             logging.debug("Left mouse button pressed")
-        elif button == BUTTON_RIGHT_CLICK:
+        elif button == RIGHT_CLICK:
             pyautogui.mouseDown(button='right')
             logging.debug("Right mouse button pressed")
-        elif button == BUTTON_MIDDLE_CLICK:
+        elif button == MIDDLE_CLICK:
             pyautogui.mouseDown(button='middle')
             logging.debug("Middle mouse button pressed")
-        elif button == BUTTON_SPEED_UP:
+        elif button == MOUSE_SPEED_UP:
             self.increase_sensitivity()
-        elif button == BUTTON_SPEED_DOWN:
+        elif button == MOUSE_SPEED_DOWN:
             self.decrease_sensitivity()
-        elif button == BUTTON_EXIT:
+        elif button == EXIT_BUTTON:
             logging.info("Exit button pressed")
             return True
         return False
 
     def handle_button_release(self, button):
-        if button == BUTTON_LEFT_CLICK:
+        if button == LEFT_CLICK:
             pyautogui.mouseUp(button='left')
-        elif button == BUTTON_RIGHT_CLICK:
+        elif button == RIGHT_CLICK:
             pyautogui.mouseUp(button='right')
-        elif button == BUTTON_MIDDLE_CLICK:
+        elif button == MIDDLE_CLICK:
             pyautogui.mouseUp(button='middle')
 
     def increase_sensitivity(self):
@@ -114,9 +117,27 @@ class GamepadMouse:
         horizontal_scroll = scroll_vector[0]
 
         if vertical_scroll != 0:
-            pyautogui.scroll(int(-vertical_scroll * SCROLL_SENSITIVITY * 10))
+            pyautogui.scroll(
+                int(-vertical_scroll * self.current_scroll_sensitivity * 10))
         if horizontal_scroll != 0:
-            pyautogui.hscroll(int(horizontal_scroll * SCROLL_SENSITIVITY * 10))
+            pyautogui.hscroll(
+                int(horizontal_scroll * self.current_scroll_sensitivity * 10))
+
+    def increase_scroll_sensitivity(self):
+        self.current_scroll_sensitivity = min(
+            self.current_scroll_sensitivity * SCROLL_SENSITIVITY_ADJUSTMENT_RATE,
+            MAX_SCROLL_SENSITIVITY
+        )
+        logging.info(f"Scroll sensitivity increased to: {
+                     self.current_scroll_sensitivity}")
+
+    def decrease_scroll_sensitivity(self):
+        self.current_scroll_sensitivity = max(
+            self.current_scroll_sensitivity / SCROLL_SENSITIVITY_ADJUSTMENT_RATE,
+            MIN_SCROLL_SENSITIVITY
+        )
+        logging.info(f"Scroll sensitivity decreased to: {
+                     self.current_scroll_sensitivity}")
 
     def run(self):
         logging.info("Starting gamepad mouse control")
@@ -130,10 +151,20 @@ class GamepadMouse:
                     elif event.type == pygame.JOYBUTTONUP:
                         self.handle_button_release(event.button)
 
-                movement_vector = self.get_stick_movement_vector(0, 1)
+                # Handle triggers for scroll sensitivity
+                l_trigger = self.joystick.get_axis(SCROLL_SENSITIVITY_DOWN)
+                r_trigger = self.joystick.get_axis(SCROLL_SENSITIVITY_UP)
+
+                if l_trigger > 0.5:
+                    self.decrease_scroll_sensitivity()
+                elif r_trigger > 0.5:
+                    self.increase_scroll_sensitivity()
+
+                movement_vector = self.get_stick_movement_vector(
+                    *MOUSE_CONTROL)
                 self.update_mouse_position(movement_vector)
 
-                scroll_vector = self.get_stick_movement_vector(2, 3)
+                scroll_vector = self.get_stick_movement_vector(*SCROLL_CONTROL)
                 self.handle_scrolling(scroll_vector)
 
                 time.sleep(0.01)
