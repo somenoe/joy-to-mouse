@@ -38,6 +38,8 @@ class GamepadMouse:
         self.setup_mouse_settings()
         self.current_scroll_sensitivity = SCROLL_SENSITIVITY
         self.log_system_info()
+        self.is_paused = False
+        logging.info("Pause functionality initialized")
 
     def setup_mouse_settings(self):
         pyautogui.FAILSAFE = False
@@ -61,6 +63,9 @@ class GamepadMouse:
         return np.array([deadzone_adjusted_x, deadzone_adjusted_y])
 
     def handle_button_press(self, button):
+        if self.is_paused and button != PAUSE_BUTTON:
+            return False
+
         if button == LEFT_CLICK:
             pyautogui.mouseDown(button='left')
             logging.debug("Left mouse button pressed")
@@ -74,9 +79,10 @@ class GamepadMouse:
             self.increase_scroll_sensitivity()
         elif button == SCROLL_SPEED_DOWN:
             self.decrease_scroll_sensitivity()
-        elif button == EXIT_BUTTON:
-            logging.info("Exit button pressed")
-            return True
+        elif button == PAUSE_BUTTON:
+            self.is_paused = not self.is_paused
+            logging.info(
+                "Program " + ("paused" if self.is_paused else "resumed"))
         return False
 
     def handle_button_release(self, button):
@@ -145,13 +151,14 @@ class GamepadMouse:
             while True:
                 for event in pygame.event.get():
                     if event.type == pygame.JOYBUTTONDOWN:
-                        should_exit = self.handle_button_press(event.button)
-                        if should_exit:
-                            return
+                        self.handle_button_press(event.button)
                     elif event.type == pygame.JOYBUTTONUP:
                         self.handle_button_release(event.button)
 
-                # Handle triggers for mouse sensitivity (changed from scroll sensitivity)
+                if self.is_paused:
+                    time.sleep(0.1)
+                    continue
+
                 l_trigger = self.joystick.get_axis(MOUSE_SENSITIVITY_DOWN)
                 r_trigger = self.joystick.get_axis(MOUSE_SENSITIVITY_UP)
 
