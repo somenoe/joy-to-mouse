@@ -1,4 +1,4 @@
-# GamePad Mouse Controller
+# Joy-to-Mouse Controller
 
 A Python application that allows you to use your game controller as a mouse input device.
 
@@ -6,28 +6,34 @@ A Python application that allows you to use your game controller as a mouse inpu
 
 - Use left analog stick for mouse movement
 - Use right analog stick for scrolling (vertical and horizontal)
-- Controller buttons for mouse clicks
-- Adjustable mouse sensitivity with shoulder buttons (LB/RB)
-- Adjustable scroll sensitivity using triggers (L2/R2)
-- Support for multiple controller types (Xbox, PlayStation, and generic controllers)
-- Smooth cursor movement with adjustable acceleration
-- Comprehensive logging system
-- Easy-to-customize control mappings
+- Controller buttons for mouse clicks (A/B/X for left/right/middle)
+- Adjustable scroll sensitivity with shoulder buttons (LB/RB)
+- Adjustable mouse sensitivity using triggers (L2/R2)
+- Pause functionality with Start button
+- Smooth cursor movement with configurable:
+  - Deadzone
+  - Acceleration
+  - Min/max sensitivity ranges
+- Comprehensive logging system with:
+  - Timestamped log files
+  - Debug and error tracking
+  - System info logging
+- Easy-to-customize control mappings via config.py
 
 ## Requirements
 
-- Python 3.7+
-- pygame
-- pyautogui
-- numpy
+- Python 3.7+ (3.12+ recommended 😆)
+- [pygame](https://www.pygame.org/)
+- [pyautogui](https://pyautogui.readthedocs.io/)
+- [numpy](https://numpy.org/)
 
 ## Installation
 
 1. Clone this repository:
 
     ```bash
-    git clone https://github.com/yourusername/gamepad-mouse
-    cd gamepad-mouse
+    git clone https://github.com/somenoe/joy-to-mouse
+    cd joy-to-mouse
     ```
 
 2. Install the required dependencies:
@@ -45,7 +51,7 @@ A Python application that allows you to use your game controller as a mouse inpu
 python main.py
 ```
 
-### Default Control Mappings
+### Control Mappings
 
 #### Button Controls
 
@@ -56,7 +62,7 @@ python main.py
 | Middle Click    | X Button        | Square Button          |
 | Speed Up        | RB              | R1                     |
 | Speed Down      | LB              | L1                     |
-| Exit Program    | Start           | Options                |
+| Pause Program   | Start           | Options                |
 
 #### Analog Controls
 
@@ -67,72 +73,9 @@ python main.py
 | Decrease Scroll Speed    | L2 Trigger             |
 | Increase Scroll Speed    | R2 Trigger             |
 
-## Configuration
+### Configuration
 
-You can customize the controls and settings by editing `config.py`. The configuration is organized into several sections:
-
-### Button Mappings
-
-```python
-# Xbox Controller Button Constants
-BUTTON_A = 0
-BUTTON_B = 1
-BUTTON_X = 2
-# ... etc
-
-# Button Action Mappings
-LEFT_CLICK = BUTTON_A
-RIGHT_CLICK = BUTTON_B
-MIDDLE_CLICK = BUTTON_X
-```
-
-### Analog Stick and Trigger Mappings
-
-```python
-# Stick Action Mappings
-MOUSE_CONTROL = (LEFT_ANALOG_X, LEFT_ANALOG_Y)
-SCROLL_CONTROL = (RIGHT_ANALOG_X, RIGHT_ANALOG_Y)
-SCROLL_SENSITIVITY_DOWN = TRIGGER_L2
-SCROLL_SENSITIVITY_UP = TRIGGER_R2
-```
-
-### Mouse Settings
-
-```python
-MOUSE_SPEED = 20.0
-MOUSE_SENSITIVITY = 2.0
-MIN_SENSITIVITY = 0.5
-MAX_SENSITIVITY = 5.0
-DEADZONE = 0.1
-ACCELERATION = 1.2
-```
-
-### Scroll Settings
-
-```python
-SCROLL_SENSITIVITY = 2
-SCROLL_SENSITIVITY_ADJUSTMENT_RATE = 1.2
-MIN_SCROLL_SENSITIVITY = 0.5
-MAX_SCROLL_SENSITIVITY = 5.0
-```
-
-## Features
-
-### Logging
-
-The application creates detailed logs in the `logs` directory, including:
-
-- Mouse movement tracking
-- Sensitivity changes
-- Error reporting
-- System information
-
-### Dynamic Sensitivity
-
-- Real-time mouse sensitivity adjustment using shoulder buttons
-- Real-time scroll sensitivity adjustment using triggers
-- Built-in minimum and maximum sensitivity limits
-- Smooth acceleration for precise control
+You can customize the controls and settings by editing `config.py`.
 
 ## Troubleshooting
 
@@ -141,24 +84,33 @@ The application creates detailed logs in the `logs` directory, including:
    - Try reconnecting the controller
    - Check if pygame recognizes your controller
    - Verify controller drivers are installed
+   - Check logs in `logs/` directory for initialization errors
 
 2. **Cursor movement issues**:
-   - Adjust `MOUSE_SENSITIVITY` and `MOUSE_SPEED` in config.py
-   - Try adjusting `DEADZONE` if there's unwanted drift
-   - Modify `ACCELERATION` for different movement feels
+   - Adjust `MOUSE_SENSITIVITY` (default: 3.0) and `MOUSE_SPEED` (default: 20.0) in config.py
+   - Try adjusting `DEADZONE` (default: 0.1) if there's unwanted drift
+   - Modify `ACCELERATION` (default: 1.2) for different movement feels
+   - Use L2/R2 triggers to dynamically adjust sensitivity between 0.5 and 7.0
 
 3. **Scrolling issues**:
-   - Adjust `SCROLL_SENSITIVITY` in config.py
+   - Adjust `SCROLL_SENSITIVITY` (default: 3) in config.py
+   - Use LB/RB buttons to dynamically adjust scroll speed between 0.5 and 7.0
    - Verify right analog stick functionality
    - Check trigger axis mappings for your controller
-   - Review logs for any reported issues
+   - Review logs in `logs/` directory for any reported issues
+
+4. **Program freezing/unresponsive**:
+   - Press Start/Options button to toggle pause state
+   - Check logs for any error messages
+   - Ensure CPU usage isn't too high during operation
+   - Verify controller is still connected
+
+## Acknowledgments
+
+- Thanks to the [pygame](https://www.pygame.org) community for the controller support
+- [PyAutoGUI](https://pyautogui.readthedocs.io) team for mouse control functionality
+- [NumPy](https://numpy.org) team for mathematical operations
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- Thanks to the pygame community for the controller support
-- PyAutoGUI team for mouse control functionality
-- NumPy team for mathematical operations
