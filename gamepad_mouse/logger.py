@@ -3,7 +3,8 @@ import os
 from datetime import datetime
 
 
-def setup_logger():
+def setup_logger() -> logging.Logger:
+    """Setup logger for the application"""
     os.makedirs('logs', exist_ok=True)
 
     log_filename = f'logs/mouse_movement_{
